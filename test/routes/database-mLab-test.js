@@ -34,6 +34,15 @@ describe('mLab Cloud Database Tests', function() {
             // console.log(testReview);
         });
     });
+    describe('Verify That The Review Got Added To Database', function() {
+        it('Should retrieve data from test database', function(done) {
+            Review.find({title: 'Opel Vectra 2009 1.6', description: "Very slow, bad on petrol"}, (err, title) => {
+                if(err) {throw err;}
+                if(title.length === 0) {throw new Error('No data!');}
+                done();
+            });
+        });
+    });
     after(function(done){
         mongoose.connection.close(done);
     });
