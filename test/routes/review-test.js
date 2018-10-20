@@ -1,6 +1,8 @@
+// william wall
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let expect = chai.expect;
+
 
 chai.use(chaiHttp);
 let _ = require('lodash');
@@ -9,7 +11,7 @@ chai.use(require('chai-things'));
 describe('Reviews', function () {
 
     describe('GET /reviews', () => {
-        it('', function () {
+        it('should return all of the reviews from the database', function () {
 
         });
     });
