@@ -24,6 +24,16 @@ describe('mLab Cloud Database Tests', function() {
             done();
         });
     });
+    describe('Test Database Connection By Adding a Review', function() {
+        it('New review saved to test database', function(done) {
+            var testReview = new Review({
+                title: "Opel Vectra 2009 1.6",
+                description: "Very slow, bad on petrol"
+            });
+            testReview.save(done);
+            // console.log(testReview);
+        });
+    });
     after(function(done){
         mongoose.connection.close(done);
     });
