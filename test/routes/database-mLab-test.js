@@ -44,6 +44,8 @@ describe('mLab Cloud Database Tests', function() {
         });
     });
     after(function(done){
-        mongoose.connection.close(done);
+        mongoose.connection.db.dropDatabase(function(){
+            mongoose.connection.close(done);
+        });
     });
 });
