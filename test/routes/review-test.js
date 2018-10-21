@@ -1,8 +1,8 @@
 // william wall
-
 "use strict";
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const assert = require('assert');
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');
@@ -41,8 +41,15 @@ describe('Reviews', function () {
         });
     });
     describe('POST /reviews', function () {
-        it('', function () {
-
+        describe('Add a Review', function () {
+            it('should save a review to database', function (done) {
+                let aReview = new Review({title: 'Citroen', description: 'Great motor'});
+                aReview.save()
+                    .then(() =>{
+                        assert(!aReview.isNew);
+                        done();
+                    })
+            });
         });
     });
     describe('PUT /reviews/:id/', () => {
@@ -66,8 +73,6 @@ describe('DELETE /reviews/:id', () => {
         });
     });
     after(function (done) {
-        mongoose.connection.db.dropDatabase(function () {
             mongoose.connection.close(done);
-        });
     });
 });
