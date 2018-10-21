@@ -26,7 +26,6 @@ describe('Reviews', function () {
         db.on('error', console.error.bind(console, 'connection error'));
         db.once('open', function () {
             console.log('We are connected to test database!');
-            // done();
         });
         var testReview = new Review({
             title: "Honda Civic 2003",
@@ -35,17 +34,24 @@ describe('Reviews', function () {
         testReview.save(done);
     });
 
+    let someReview;
+    beforeEach((done) => {
+        someReview = new Review({title: 'Review title 1', description: "Review description 1"});
+        someReview.save()
+            .then(() => done());
+    });
+
     describe('GET /reviews', () => {
-        it('', function () {
+        it('should return all of the reviews objects', function () {
 
         });
     });
     describe('POST /reviews', function () {
-        describe('Add a Review', function () {
+        describe('Adding Reviews', function () {
             it('should save a review to database', function (done) {
                 let aReview = new Review({title: 'Citroen', description: 'Great motor'});
                 aReview.save()
-                    .then(() =>{
+                    .then(() => {
                         assert(!aReview.isNew);
                         done();
                     })
@@ -60,11 +66,19 @@ describe('Reviews', function () {
 
         });
     });
-});
-describe('DELETE /reviews/:id', () => {
-    describe('', function () {
-        it('', function () {
 
+    describe('DELETE /reviews/:id', () => {
+        let aReview = new Review({title: 'Review title delete-test', description: 'Great motor'});
+        aReview.save()
+        describe('Deleting Reviews', function () {
+            it('should remove instance of the model review', function (done) {
+                aReview.remove()
+                    .then(() => Review.findOne({title: 'Review title delete-test'}))
+                    .then((review) => {
+                        assert(review === null);
+                        done();
+                    });
+            });
         });
     });
     describe('', function () {
@@ -73,6 +87,9 @@ describe('DELETE /reviews/:id', () => {
         });
     });
     after(function (done) {
+        mongoose.connection.db.dropDatabase(function () {
             mongoose.connection.close(done);
+        });
     });
+
 });
