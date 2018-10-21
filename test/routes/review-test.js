@@ -4,18 +4,23 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const assert = require('assert');
 
+
+let app = require('../../src/app.js');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let expect = chai.expect;
+let should = chai.should();
+
 
 chai.use(chaiHttp);
 let _ = require('lodash');
 chai.use(require('chai-things'));
+var ReviewSchema = require('mongoose').model('Review').schema
 
-const ReviewSchema = new Schema({
-    title: String,
-    description: String
-});
+// const ReviewSchema = new Schema({
+//     title: String,
+//     description: String
+// });
 
 const Review = mongoose.model("Review", ReviewSchema);
 
@@ -50,7 +55,15 @@ describe('Reviews', function () {
     }
 
     describe('GET /reviews', () => {
-        it('should return all of the reviews objects', function () {
+        it('should return all of the reviews objects', function (done) {
+            chai.request(app)
+                .get('/reviews')
+                .end((err, res) => {
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.a('object');
+                    // console.log(res.body);
+                    done();
+                });
 
         });
     });
