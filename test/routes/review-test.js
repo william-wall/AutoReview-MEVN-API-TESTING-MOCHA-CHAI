@@ -41,6 +41,14 @@ describe('Reviews', function () {
             .then(() => done());
     });
 
+    function assertReview(operation, done) {
+        operation
+            .then(() => Review.find({}))
+            .then((reviews) => {
+                done();
+            });
+    }
+
     describe('GET /reviews', () => {
         it('should return all of the reviews objects', function () {
 
@@ -58,12 +66,16 @@ describe('Reviews', function () {
             });
         });
     });
-    describe('PUT /reviews/:id/', () => {
-        it('', function () {
-
-        });
-        it('', function () {
-
+    describe('PUT /reviews/:id', () => {
+        describe('Updating Reviews', function () {
+            it('should update an instance of review title', (done) => {
+                someReview.set('title', 'Review title 2');
+                assertReview(someReview.save(), done);
+            });
+            it('should update a specific record by choosing title', (done) => {
+                assertReview(Review.update({title: 'Review title 1'},
+                    {title: 'Updated review title'}), done);
+            });
         });
     });
 
@@ -80,8 +92,8 @@ describe('Reviews', function () {
                     });
             });
             it('should find review by its title and remove', (done) => {
-                Review.findOneAndRemove({title: 'Citroen' })
-                    .then(() => Review.findOne({title: 'Citroen' }))
+                Review.findOneAndRemove({title: 'Citroen'})
+                    .then(() => Review.findOne({title: 'Citroen'}))
                     .then((review) => {
                         assert(review === null);
                         done();
