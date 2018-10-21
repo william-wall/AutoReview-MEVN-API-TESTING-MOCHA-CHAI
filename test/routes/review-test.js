@@ -79,6 +79,15 @@ describe('Reviews', function () {
                         done();
                     });
             });
+            it('should find review by its title and remove', (done) => {
+                Review.findOneAndRemove({title: 'Citroen' })
+                    .then(() => Review.findOne({title: 'Citroen' }))
+                    .then((review) => {
+                        assert(review === null);
+                        done();
+                    });
+            });
+
         });
     });
     describe('', function () {
@@ -91,5 +100,4 @@ describe('Reviews', function () {
             mongoose.connection.close(done);
         });
     });
-
 });
