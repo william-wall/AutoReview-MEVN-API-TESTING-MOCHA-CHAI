@@ -152,6 +152,24 @@ describe('Reviews', function () {
                     });
             });
 
+            it('should delete by id', function(done) {
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function(err, res){
+                        chai.request(app)
+                            .delete('/reviews/'+res.body.reviews[0]._id)
+                            .end(function(error, response){
+                                response.should.have.status(200);
+                                response.should.be.json;
+                                response.body.should.be.a('object');
+                                // expect(res.body).to.have.property('success').equal(true);
+                                expect(res.body.reviews.length).to.equal(11);
+                                done();
+                            });
+                    });
+            });
+
+
         });
     });
     describe('', function () {
