@@ -168,7 +168,7 @@ describe('Reviews', function () {
                     });
             });
 
-            it('should delete donation by id and remove the object instance', function (done) {
+            it('should delete specific database entry and check that it is removed', function (done) {
                 chai.request(app)
                     .get('/reviews')
                     .end(function (err, res) {
