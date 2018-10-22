@@ -71,7 +71,7 @@ describe('Reviews', function () {
                 });
         });
         it('should find a user with a particular id', (done) => {
-            Review.findOne({ _id: someReview._id })
+            Review.findOne({_id: someReview._id})
                 .then((review) => {
                     assert(review.title === 'Review title 1');
                     done();
@@ -152,31 +152,49 @@ describe('Reviews', function () {
                     });
             });
 
-            it('should delete by id', function(done) {
+            it('should delete by id', function (done) {
                 chai.request(app)
                     .get('/reviews')
-                    .end(function(err, res){
+                    .end(function (err, res) {
                         chai.request(app)
-                            .delete('/reviews/'+res.body.reviews[0]._id)
-                            .end(function(error, response){
+                            .delete('/reviews/' + res.body.reviews[0]._id)
+                            .end(function (error, response) {
                                 response.should.have.status(200);
                                 response.should.be.json;
                                 response.body.should.be.a('object');
-                                // expect(res.body).to.have.property('success').equal(true);
                                 expect(res.body.reviews.length).to.equal(11);
                                 done();
                             });
                     });
             });
 
+            it('should delete donation by id and remove the object instance', function (done) {
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .delete('/reviews/' + res.body.reviews[10]._id)
+                            .end(function (err, res) {
+                                expect(res).to.have.status(200);
+                                expect(res.body).to.have.property('success').equal(true);
+                                let result = _.map(res.body.reviews, (reviews) => {
+                                    return {
+                                        title: reviews.title,
+                                        description: reviews.description
+                                    };
+                                });
+                                expect(result).to.not.include({
+                                    title: 'Honda Civic 2003',
+                                    description: 'Fast car, very nice!'
+                                });
+                                done();
+                            });
+                    });
+            });
 
         });
     });
-    describe('', function () {
-        it('', function () {
 
-        });
-    });
     after(function (done) {
         mongoose.connection.db.dropDatabase(function () {
             mongoose.connection.close(done);
