@@ -61,10 +61,27 @@ describe('Reviews', function () {
                 .end((err, res) => {
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.a('object');
-                    // console.log(res.body);
+                    // let result = _.map(res.body, (reviews) => {
+                    //     return {
+                    //         title: reviews.title,
+                    //         description: reviews.description
+                    //     }
+                    // });
+                    console.log(res.body);
+                    // Object.keys('Review').map(function(key, index) {
+                    //     Review[key] *= 2;
+                    // });
+                    //
+                    // console.log(Review);
                     done();
                 });
-
+        });
+        it('should find a user with a particular id', (done) => {
+            Review.findOne({ _id: someReview._id })
+                .then((review) => {
+                    assert(review.title === 'Review title 1');
+                    done();
+                });
         });
     });
     describe('POST /reviews', function () {
