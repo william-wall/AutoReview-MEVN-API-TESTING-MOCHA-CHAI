@@ -56,10 +56,11 @@ app.post('/add_review', (req, res) => {
     })
     new_review.save(function (error) {
         if (error) {
+            console.log('Review did NOT add successfully!')
             console.log(error)
         }
         res.send({
-            success: true
+        success: true
         })
     })
 })

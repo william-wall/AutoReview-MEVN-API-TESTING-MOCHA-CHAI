@@ -88,6 +88,34 @@ describe('Reviews', function () {
                         done();
                     })
             });
+            it('should add review to database, verify and get correct message from post function', function (done) {
+                let someReview = {
+                    title: 'Adding title',
+                    description: 'Adding description',
+                };
+                chai.request(app)
+                    .post('/add_review')
+                    .send(someReview)
+                    .end(function (err, res) {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.have.property('success').equal(true);
+                        done();
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function (err, res) {
+                        let result = _.map(res.body.reviews, (someReview) => {
+                            return {
+                                title: someReview.title,
+                                description: someReview.description
+                            };
+                        });
+                        expect(result).to.include({title: 'Adding title', description: 'Adding description'});
+                        done();
+                    });
+            });
         });
     });
     describe('PUT /reviews/:id', () => {
