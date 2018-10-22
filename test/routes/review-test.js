@@ -17,11 +17,6 @@ let _ = require('lodash');
 chai.use(require('chai-things'));
 var ReviewSchema = require('mongoose').model('Review').schema
 
-// const ReviewSchema = new Schema({
-//     title: String,
-//     description: String
-// });
-
 const Review = mongoose.model("Review", ReviewSchema);
 
 describe('Reviews', function () {
@@ -61,18 +56,17 @@ describe('Reviews', function () {
                 .end((err, res) => {
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.a('object');
-                    // let result = _.map(res.body, (reviews) => {
-                    //     return {
-                    //         title: reviews.title,
-                    //         description: reviews.description
-                    //     }
-                    // });
-                    console.log(res.body);
-                    // Object.keys('Review').map(function(key, index) {
-                    //     Review[key] *= 2;
-                    // });
-                    //
-                    // console.log(Review);
+                    let result = _.map(res.body.reviews, (reviews) => {
+                        return {
+                            title: reviews.title,
+                            description: reviews.description
+                        }
+                    });
+                    // console.log(result);
+                    expect(result).to.include({title: 'Honda Civic 2003', description: 'Fast car, very nice!'});
+                    expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});
+                    expect(result).to.include({title: 'Review title delete-test', description: 'Great motor'});
+                    expect(res.body.reviews.length).to.equal(3);
                     done();
                 });
         });
