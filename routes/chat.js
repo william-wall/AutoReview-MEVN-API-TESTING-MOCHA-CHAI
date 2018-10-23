@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
 });
 
 /* GET ALL CHATS */
-router.get('/:roomid', function(req, res, next) {
+router.get('/all_chats/:roomid', function(req, res, next) {
   Chat.find({ room: req.params.roomid }, function (err, products) {
     if (err) return next(err);
     res.json(products);
@@ -36,7 +36,7 @@ router.get('/:roomid', function(req, res, next) {
 });
 
 /* GET SINGLE CHAT BY ID */
-router.get('/:id', function(req, res, next) {
+router.get('/single_chat/:id', function(req, res, next) {
   Chat.findById(req.params.id, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -44,7 +44,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 /* SAVE CHAT */
-router.post('/', function(req, res, next) {
+router.post('/save_chat', function(req, res, next) {
   Chat.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -52,7 +52,7 @@ router.post('/', function(req, res, next) {
 });
 
 /* UPDATE CHAT */
-router.put('/:id', function(req, res, next) {
+router.put('/update_chat/:id', function(req, res, next) {
   Chat.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -60,7 +60,7 @@ router.put('/:id', function(req, res, next) {
 });
 
 /* DELETE CHAT */
-router.delete('/:id', function(req, res, next) {
+router.delete('/delete_chat/:id', function(req, res, next) {
   Chat.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
