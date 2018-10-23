@@ -45,6 +45,7 @@
     "chai-things": "^0.2.0",
     "mocha": "^3.4.2",
     "nodemon": "^1.17.1",
+    "supertest": "^3.3.0",
     "typescript": "^2.8.1"
   }
 }
