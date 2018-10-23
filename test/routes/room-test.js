@@ -32,9 +32,10 @@ describe('Reviews', function () {
 
     let someRoom;
     beforeEach((done) => {
-        someRoom = new Room({
-            room_name: 'Room 1'
-        });
+        someRoom = new Room(
+            {
+                room_name: 'Room 1'
+            });
         someRoom.save()
             .then(() => done());
     });
@@ -43,8 +44,26 @@ describe('Reviews', function () {
 
         describe('Getting Rooms', () => {
 
-            it('should return all of the room objects', function () {
-
+            it('should return all of the rooms objects', function (done) {
+                chai.request(app)
+                    .get('/api/room/all_rooms')
+                    .end((err, res) => {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.a('array');
+                        console.log(res.body);
+                        // let result = _.map(res.body.reviews, (reviews) => {
+                        //     return {
+                        //         room_name: reviews.room_name,
+                        //         description: reviews.description
+                        //     }
+                        // });
+                        // console.log(result);
+                        // expect(result).to.include({title: 'Honda Civic 2003', description: 'Fast car, very nice!'});
+                        // expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});
+                        // expect(result).to.include({title: 'Review title delete-test', description: 'Great motor'});
+                        // expect(res.body.reviews.length).to.equal(3);
+                        done();
+                    });
             });
 
         });
