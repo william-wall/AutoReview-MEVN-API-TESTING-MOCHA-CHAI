@@ -21,7 +21,6 @@ describe('mLab Cloud Database Tests', function () {
         db.on('error', console.error.bind(console, 'connection error'));
         db.once('open', function () {
             console.log('We are connected to test database!');
-            // done();
         });
         var testReview = new Review({
                 title: "Honda Civic 2003",
@@ -29,6 +28,8 @@ describe('mLab Cloud Database Tests', function () {
             });
         testReview.save(done);
     });
+
+
     describe('Test Database Connection By Adding a Review', function () {
         it('New review saved to test database', function (done) {
             var testReview = new Review({
@@ -38,6 +39,8 @@ describe('mLab Cloud Database Tests', function () {
             testReview.save(done);
         });
     });
+
+
     describe('Verify That The Review Got Added To Database', function () {
         it('Should retrieve data from test database', function (done) {
             Review.find({title: 'Honda Civic 2003'}, (err, title) => {

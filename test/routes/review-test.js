@@ -20,6 +20,7 @@ var ReviewSchema = require('mongoose').model('Review').schema
 const Review = mongoose.model("Review", ReviewSchema);
 
 describe('Reviews', function () {
+
     before(function (done) {
         mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
         const db = mongoose.connection;
@@ -49,37 +50,45 @@ describe('Reviews', function () {
             });
     }
 
+
     describe('GET /reviews', () => {
-        it('should return all of the reviews objects', function (done) {
-            chai.request(app)
-                .get('/reviews')
-                .end((err, res) => {
-                    expect(res).to.have.status(200);
-                    expect(res.body).to.be.a('object');
-                    let result = _.map(res.body.reviews, (reviews) => {
-                        return {
-                            title: reviews.title,
-                            description: reviews.description
-                        }
+
+        describe('Getting Reviews', () => {
+
+            it('should return all of the reviews objects', function (done) {
+                chai.request(app)
+                    .get('/reviews')
+                    .end((err, res) => {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.a('object');
+                        let result = _.map(res.body.reviews, (reviews) => {
+                            return {
+                                title: reviews.title,
+                                description: reviews.description
+                            }
+                        });
+                        // console.log(result);
+                        expect(result).to.include({title: 'Honda Civic 2003', description: 'Fast car, very nice!'});
+                        expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});
+                        expect(result).to.include({title: 'Review title delete-test', description: 'Great motor'});
+                        expect(res.body.reviews.length).to.equal(3);
+                        done();
                     });
-                    // console.log(result);
-                    expect(result).to.include({title: 'Honda Civic 2003', description: 'Fast car, very nice!'});
-                    expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});
-                    expect(result).to.include({title: 'Review title delete-test', description: 'Great motor'});
-                    expect(res.body.reviews.length).to.equal(3);
-                    done();
-                });
-        });
-        it('should find a user with a particular id', (done) => {
-            Review.findOne({_id: someReview._id})
-                .then((review) => {
-                    assert(review.title === 'Review title 1');
-                    done();
-                });
+            });
+            it('should find a user with a particular id', (done) => {
+                Review.findOne({_id: someReview._id})
+                    .then((review) => {
+                        assert(review.title === 'Review title 1');
+                        done();
+                    });
+            });
         });
     });
+
     describe('POST /reviews', function () {
+
         describe('Adding Reviews', function () {
+
             it('should save a review to database', function (done) {
                 let aReview = new Review({title: 'Citroen', description: 'Great motor'});
                 aReview.save()
@@ -118,8 +127,12 @@ describe('Reviews', function () {
             });
         });
     });
+
+
     describe('PUT /reviews/:id', () => {
+
         describe('Updating Reviews', function () {
+
             it('should update an instance of review title', (done) => {
                 someReview.set('title', 'Review title 2');
                 assertReview(someReview.save(), done);
@@ -128,13 +141,47 @@ describe('Reviews', function () {
                 assertReview(Review.update({title: 'Review title 1'},
                     {title: 'Updated review title'}), done);
             });
+            it('should update a specific record by id and verify its added to the database', (done) => {
+                let updateReview = {
+                    title: 'Updated Title',
+                    description: 'Updated Description'
+                };
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .put('/reviews/' + res.body.reviews[0]._id)
+                            .send(updateReview)
+                            .end(function (error, response) {
+                                expect(res).to.have.status(200);
+                                done();
+                            });
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function (err, res) {
+                        let result = _.map(res.body.reviews, (someReview) => {
+                            return {
+                                title: someReview.title,
+                                description: someReview.description
+                            };
+                        });
+                        expect(result).to.include({title: 'Updated Title', description: 'Updated Description'});
+                        done();
+                    });
+            });
         });
     });
 
+
     describe('DELETE /reviews/:id', () => {
+
         let aReview = new Review({title: 'Review title delete-test', description: 'Great motor'});
         aReview.save()
         describe('Deleting Reviews', function () {
+
             it('should remove instance of the model review', function (done) {
                 aReview.remove()
                     .then(() => Review.findOne({title: 'Review title delete-test'}))
@@ -151,7 +198,6 @@ describe('Reviews', function () {
                         done();
                     });
             });
-
             it('should delete by id', function (done) {
                 chai.request(app)
                     .get('/reviews')
@@ -162,12 +208,11 @@ describe('Reviews', function () {
                                 response.should.have.status(200);
                                 response.should.be.json;
                                 response.body.should.be.a('object');
-                                expect(res.body.reviews.length).to.equal(11);
+                                expect(res.body.reviews.length).to.equal(12);
                                 done();
                             });
                     });
             });
-
             it('should delete specific database entry and check that it is removed', function (done) {
                 chai.request(app)
                     .get('/reviews')
