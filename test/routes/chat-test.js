@@ -138,6 +138,41 @@ describe('mLab Cloud Database Tests', function () {
 
     });
 
+    describe('DELETE /chats', () => {
+        let deleteChat = new Chat({nickname: 'Sarah', message: 'Delete chat message'});
+        deleteChat.save()
+        describe('Deleting Chats', () => {
+
+            it('should delete chat by id and remove the object instance', function (done) {
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .delete('/api/chats/' + res.body[0]._id)
+                            .end(function (err, res) {
+                                expect(res).to.have.status(200);
+                                done();
+                            });
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        expect(res).to.have.status(200);
+                        // expect(res.body).be.be.a('array');
+                        let result = _.map(res.body, (rooms) => {
+                            return {
+                                room_name: rooms.room_name
+                            };
+                        });
+                        expect(result).to.not.include({room_name: 'Room delete-test'});
+                        done();
+                    })
+            })
+        });
+
+    });
 
     after(function (done) {
         mongoose.connection.db.dropDatabase(function () {
