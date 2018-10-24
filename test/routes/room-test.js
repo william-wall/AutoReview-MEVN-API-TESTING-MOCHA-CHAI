@@ -65,7 +65,39 @@ describe('Reviews', function () {
             });
         });
     });
+    describe('POST /rooms', () => {
 
+        describe('Adding Rooms', () => {
+
+            it('should add room to database and verify', function (done) {
+                let newRoom = {
+                    room_name: 'New Room'
+                };
+                chai.request(app)
+                    .post('/api/room/save_room')
+                    .send(newRoom)
+                    .end(function (err, res) {
+                        expect(res).to.have.status(200);
+                        done();
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/api/room/all_rooms')
+                    .end(function (err, res) {
+                        let result = _.map(res.body, (newRoom) => {
+                            return {
+                                room_name: newRoom.room_name
+                            };
+                        });
+                        expect(result).to.include({room_name: 'New Room'});
+                        done();
+                    });
+            });
+
+        });
+
+    });
 
     after(function (done) {
         mongoose.connection.db.dropDatabase(function () {
