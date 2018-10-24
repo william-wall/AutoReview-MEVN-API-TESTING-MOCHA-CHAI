@@ -99,44 +99,43 @@ describe('Reviews', function () {
 
     });
 
-    // describe('PUT /rooms', () => {
-    //
-    //     describe('Updating Rooms', () => {
-    //
-    //         it('should update a specific record by id and verify its added to the database', (done) => {
-    //             let updateRoom = {
-    //                 room_name: 'Updated Room'
-    //             };
-    //             chai.request(app)
-    //                 .get('/reviews')
-    //                 .end(function (err, res) {
-    //                     chai.request(app)
-    //                         .put('/reviews/' + res.body.reviews[0]._id)
-    //                         .send(updateReview)
-    //                         .end(function (error, response) {
-    //                             expect(res).to.have.status(200);
-    //                             done();
-    //                         });
-    //                 });
-    //         });
-    //         after(function (done) {
-    //             chai.request(app)
-    //                 .get('/reviews')
-    //                 .end(function (err, res) {
-    //                     let result = _.map(res.body.reviews, (someReview) => {
-    //                         return {
-    //                             title: someReview.title,
-    //                             description: someReview.description
-    //                         };
-    //                     });
-    //                     expect(result).to.include({title: 'Updated Title', description: 'Updated Description'});
-    //                     done();
-    //                 });
-    //         });
-    //
-    //     });
-    //
-    // });
+    describe('PUT /rooms', () => {
+
+        describe('Updating Rooms', () => {
+
+            it('should update a specific record by id and verify its added to the database', (done) => {
+                let updateRoom = {
+                    room_name: 'Updated Room'
+                };
+                chai.request(app)
+                    .get('/api/rooms/')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .put('/api/rooms/' + res.body[0]._id)
+                            .send(updateRoom)
+                            .end(function (error, response) {
+                                expect(res).to.have.status(200);
+                                done();
+                            });
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/api/rooms/')
+                    .end(function (err, res) {
+                        let result = _.map(res.body, (rooms) => {
+                            return {
+                                room_name: rooms.room_name,
+                            };
+                        });
+                        expect(result).to.include({room_name: 'Updated Room'});
+                        done();
+                    });
+            });
+
+        });
+
+    });
     after(function (done) {
         mongoose.connection.db.dropDatabase(function () {
             mongoose.connection.close(done);
