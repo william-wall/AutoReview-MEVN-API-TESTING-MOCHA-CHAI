@@ -99,6 +99,44 @@ describe('mLab Cloud Database Tests', function () {
         });
     });
 
+    describe('PUT /chats', () => {
+
+        describe('Updating Chats', () => {
+
+            it('should update a specific record by id and verify its added to the database', (done) => {
+                let updateChat = {
+                    nickname: 'Emma', message: 'Updating chat message'
+                };
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .put('/api/chats/' + res.body[0]._id)
+                            .send(updateChat)
+                            .end(function (error, response) {
+                                expect(res).to.have.status(200);
+                                done();
+                            });
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        let result = _.map(res.body, (chats) => {
+                            return {
+                                nickname: chats.nickname,
+                                message: chats.message
+                            }
+                        });
+                        expect(result).to.include({nickname: 'Emma', message: 'Updating chat message'});
+                        done();
+                    });
+            });
+
+        });
+
+    });
 
 
     after(function (done) {
