@@ -56,10 +56,43 @@ describe('mLab Cloud Database Tests', function () {
                                 message: chats.message
                             }
                         });
-                        // console.log(result);
                         expect(result).to.include({nickname: 'Will', message: 'Hello'});
                         expect(result).to.include({nickname: 'Ger', message: 'Hello, will im new here!'});
                         expect(res.body.length).to.equal(2);
+                        done();
+                    });
+            });
+        });
+    });
+
+    describe('POST /chats', function () {
+
+        describe('Adding Chats', function () {
+
+            it('should add chat to database directly to a specific room, verify and get correct message from post function', function (done) {
+                let someChat = {
+                    room : '5bd04dc76067682a204fc3ed', nickname: 'Joan', message: 'Im new here'
+                };
+                chai.request(app)
+                    .post('/api/chats/')
+                    .send(someChat)
+                    .end(function (err, res) {
+                        expect(res).to.have.status(200);
+                        // expect(res.body).to.have.property('success').equal(true);
+                        done();
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        let result = _.map(res.body, (chats) => {
+                            return {
+                                nickname: chats.nickname,
+                                message: chats.message
+                            }
+                        });
+                        expect(result).to.include({nickname: 'Joan', message: 'Im new here'});
                         done();
                     });
             });
