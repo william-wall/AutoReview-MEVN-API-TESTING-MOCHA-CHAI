@@ -47,7 +47,7 @@ describe('Reviews', function () {
                 let aRoom = new Room({room_name: 'Room 2'});
                 aRoom.save()
                 chai.request(app)
-                    .get('/api/room/all_rooms')
+                    .get('/api/rooms/')
                     .end((err, res) => {
                         expect(res).to.have.status(200);
                         expect(res.body).to.be.a('array');
@@ -74,7 +74,7 @@ describe('Reviews', function () {
                     room_name: 'New Room'
                 };
                 chai.request(app)
-                    .post('/api/room/save_room')
+                    .post('/api/rooms/')
                     .send(newRoom)
                     .end(function (err, res) {
                         expect(res).to.have.status(200);
@@ -83,7 +83,7 @@ describe('Reviews', function () {
             });
             after(function (done) {
                 chai.request(app)
-                    .get('/api/room/all_rooms')
+                    .get('/api/rooms/')
                     .end(function (err, res) {
                         let result = _.map(res.body, (newRoom) => {
                             return {
@@ -99,6 +99,44 @@ describe('Reviews', function () {
 
     });
 
+    // describe('PUT /rooms', () => {
+    //
+    //     describe('Updating Rooms', () => {
+    //
+    //         it('should update a specific record by id and verify its added to the database', (done) => {
+    //             let updateRoom = {
+    //                 room_name: 'Updated Room'
+    //             };
+    //             chai.request(app)
+    //                 .get('/reviews')
+    //                 .end(function (err, res) {
+    //                     chai.request(app)
+    //                         .put('/reviews/' + res.body.reviews[0]._id)
+    //                         .send(updateReview)
+    //                         .end(function (error, response) {
+    //                             expect(res).to.have.status(200);
+    //                             done();
+    //                         });
+    //                 });
+    //         });
+    //         after(function (done) {
+    //             chai.request(app)
+    //                 .get('/reviews')
+    //                 .end(function (err, res) {
+    //                     let result = _.map(res.body.reviews, (someReview) => {
+    //                         return {
+    //                             title: someReview.title,
+    //                             description: someReview.description
+    //                         };
+    //                     });
+    //                     expect(result).to.include({title: 'Updated Title', description: 'Updated Description'});
+    //                     done();
+    //                 });
+    //         });
+    //
+    //     });
+    //
+    // });
     after(function (done) {
         mongoose.connection.db.dropDatabase(function () {
             mongoose.connection.close(done);

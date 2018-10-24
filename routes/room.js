@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var Room = require('../models/Room.js');
 
 /* GET ALL ROOMS */
-router.get('/all_rooms', function(req, res, next) {
+router.get('/', function(req, res, next) {
   Room.find(function (err, products) {
     if (err) return next(err);
     res.json(products);
@@ -13,7 +13,7 @@ router.get('/all_rooms', function(req, res, next) {
 });
 
 /* GET SINGLE ROOM BY ID */
-router.get('/single_room/:id', function(req, res, next) {
+router.get('/:id', function(req, res, next) {
   Room.findById(req.params.id, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -21,7 +21,7 @@ router.get('/single_room/:id', function(req, res, next) {
 });
 
 /* SAVE ROOM */
-router.post('/save_room', function(req, res, next) {
+router.post('/', function(req, res, next) {
   Room.create(req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -29,7 +29,7 @@ router.post('/save_room', function(req, res, next) {
 });
 
 /* UPDATE ROOM */
-router.put('/update_room/:id', function(req, res, next) {
+router.put('/:id', function(req, res, next) {
   Room.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -37,7 +37,7 @@ router.put('/update_room/:id', function(req, res, next) {
 });
 
 /* DELETE ROOM */
-router.delete('/delete_room/:id', function(req, res, next) {
+router.delete('/:id', function(req, res, next) {
   Room.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);

@@ -103,7 +103,7 @@ describe('Reviews', function () {
                     description: 'Adding description',
                 };
                 chai.request(app)
-                    .post('/add_review')
+                    .post('/reviews')
                     .send(someReview)
                     .end(function (err, res) {
                         expect(res).to.have.status(200);

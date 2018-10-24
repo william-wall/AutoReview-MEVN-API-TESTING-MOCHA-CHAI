@@ -32,8 +32,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/rooms', express.static(path.join(__dirname, 'dist')));
-app.use('/api/room', room);
-app.use('/api/chat', chat);
+app.use('/api/rooms', room);
+app.use('/api/chats', chat);
 
 /* GET ALL REVIEWS */
 app.get('/reviews', (req, res) => {
@@ -46,7 +46,7 @@ app.get('/reviews', (req, res) => {
 })
 
 /* ADD ROOM */
-app.post('/add_review', (req, res) => {
+app.post('/reviews', (req, res) => {
     var db = req.db;
     var title = req.body.title;
     var description = req.body.description;
@@ -99,7 +99,7 @@ app.delete('/reviews/:id', (req, res) => {
 })
 
 /* GET REVIEW BY SINGLE ID */
-app.get('/review/:id', (req, res) => {
+app.get('/reviews/:id', (req, res) => {
     var db = req.db;
     Review.findById(req.params.id, 'title description', function (error, review) {
         if (error) { console.error(error); }
