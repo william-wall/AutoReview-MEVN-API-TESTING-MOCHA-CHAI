@@ -59,7 +59,7 @@ describe('Reviews', function () {
                         });
                         expect(result).to.include({room_name: 'Room 1'});
                         expect(result).to.include({room_name: 'Room 2'});
-                        expect(res.body.length).to.equal(2);
+                        expect(res.body.length).to.equal(3);
                         done();
                     });
             });
@@ -133,6 +133,41 @@ describe('Reviews', function () {
                     });
             });
 
+        });
+
+    });
+    describe('DELETE /rooms', () => {
+        let aRoom = new Room({room_name: 'Room delete-test'});
+        aRoom.save()
+        describe('Deleting Rooms', () => {
+
+            it('should delete room by id and remove the object instance', function (done) {
+                chai.request(app)
+                    .get('/api/rooms/')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .delete('/api/rooms/' + res.body[0]._id)
+                            .end(function (err, res) {
+                                expect(res).to.have.status(200);
+                                done();
+                            });
+                    });
+            });
+            after(function (done) {
+                chai.request(app)
+                    .get('/api/rooms/')
+                    .end(function (err, res) {
+                        expect(res).to.have.status(200);
+                        // expect(res.body).be.be.a('array');
+                        let result = _.map(res.body, (rooms) => {
+                            return {
+                                room_name: rooms.room_name
+                            };
+                        });
+                        expect(result).to.not.include({room_name: 'Room delete-test'});
+                        done();
+                    })
+            })
         });
 
     });
