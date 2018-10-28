@@ -1,34 +1,26 @@
-'use strict';
+var supertest = require("supertest");
+var should = require("should");
 
-var app = require('../../src/app.js');
-var chai = require('chai');
-var request = require('supertest');
+let _ = require('lodash');
 
-var expect = chai.expect;
+var server = supertest.agent("http://autoreview.herokuapp.com");
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const assert = require('assert');
 
-var RoomSchema = require('mongoose').model('Room').schema
+describe("SAMPLE unit test", function () {
 
-const Room = mongoose.model("Room", RoomSchema);
+    it("should return home page", function (done) {
 
-describe('API Tests', function() {
-    before(function (done) {
-        mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
-        const db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error'));
-        db.once('open', function () {
-            console.log('We are connected to test database!');
-        });
-        var testReview = new Review({
-            title: "Honda Civic 2003",
-            description: "Fast car, very nice!"
-        });
-        testReview.save(done);
+        server
+            .get("/reviews")
+            .expect("Content-type", /json/)
+            .expect(200) // THis is HTTP response
+            .end(function (err, res) {
+                res.status.should.equal(200);
+                console.log(res.body);
+                done();
+            });
     });
 
-
-
 });
+
+
