@@ -34,19 +34,19 @@ describe("SuperTest Reviews", function () {
                             description: reviews.description
                         }
                     });
-                    console.log(result);
+                    // console.log(result);
                     done();
                 });
         });
     });
 
 
-    describe('Post Review ', function() {
-        it('should create a review', function(done) {
-                server
-                    .post('/reviews')
+    describe('Post Review ', function () {
+        it('should create a review', function (done) {
+            server
+                .post('/reviews')
                 .send(review)
-                .end(function(err, res) {
+                .end(function (err, res) {
                     expect(res.statusCode).to.equal(200);
                     review = res.body;
                     done();
@@ -55,12 +55,9 @@ describe("SuperTest Reviews", function () {
     });
 
 
+    describe('Get a review by id', function () {
 
-
-
-    describe('Get a review by id', function() {
-
-        it('should get a review by its id', function(done) {
+        it('should get a review by its id', function (done) {
             server
                 .get('/reviews/' + review._id)
                 .expect("Content-type", /json/)
@@ -73,17 +70,17 @@ describe("SuperTest Reviews", function () {
     });
 
 
-    describe('Update a review by id', function() {
-        it('should modify a review', function(done) {
+    describe('Update a review by id', function () {
+        it('should modify a review', function (done) {
 
-        review.title = 'updated title', review.description = 'updated description'
+            review.title = 'updated title', review.description = 'updated description'
             server
                 .get('/reviews')
                 .end(function (err, res) {
                     server
-                        .put('/reviews/'+ res.body.reviews[0]._id)
+                        .put('/reviews/' + res.body.reviews[0]._id)
                         .send(review)
-                        .end(function(err, res) {
+                        .end(function (err, res) {
                             expect(res.statusCode).to.equal(200);
                             done();
                         });
@@ -92,6 +89,21 @@ describe("SuperTest Reviews", function () {
         });
     });
 
+    describe('Delete a review by id', function () {
+        it('should delete a review', function (done) {
+            server
+                .get('/reviews')
+                .end(function (err, res) {
+                    server
+                        .delete('/reviews/' + res.body.reviews[0]._id)
+                        .end(function (err, res) {
+                            expect(res.statusCode).to.equal(200);
+                            // expect(res.body.message).to.equal('');
+                            done();
+                        });
+                });
+        });
+    });
 });
 
 
