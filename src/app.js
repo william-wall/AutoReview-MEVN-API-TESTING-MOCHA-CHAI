@@ -25,8 +25,11 @@ mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app', { u
 const mongodb_conn_module = require('./mongodbConnModule');
 var db = mongodb_conn_module.connect();
 
-var Review = require("../models/review");
+var Review = require("../models/Review");
 
+// if (process.env.NODE_ENV !== 'test') {
+//     app.use(logger('dev'));
+// }
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
@@ -70,6 +73,7 @@ app.put('/reviews/:id', (req, res) => {
     var db = req.db;
     Review.findById(req.params.id, 'title description', function (error, review) {
         if (error) { console.error(error); }
+
 
         review.title = req.body.title
         review.description = req.body.description

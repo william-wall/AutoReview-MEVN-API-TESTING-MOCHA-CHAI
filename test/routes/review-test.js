@@ -21,18 +21,13 @@ const Review = mongoose.model("Review", ReviewSchema);
 
 describe('Reviews', function () {
 
-    before(function (done) {
+    before(function () {
         mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
         const db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error'));
         db.once('open', function () {
             console.log('We are connected to test database!');
         });
-        var testReview = new Review({
-            title: "Honda Civic 2003",
-            description: "Fast car, very nice!"
-        });
-        testReview.save(done);
     });
 
     let someReview;
@@ -50,7 +45,6 @@ describe('Reviews', function () {
             });
     }
 
-
     describe('GET /reviews', () => {
 
         describe('Getting Reviews', () => {
@@ -59,19 +53,29 @@ describe('Reviews', function () {
                 chai.request(app)
                     .get('/reviews')
                     .end((err, res) => {
-                        expect(res).to.have.status(200);
-                        expect(res.body).to.be.a('object');
                         let result = _.map(res.body.reviews, (reviews) => {
                             return {
                                 title: reviews.title,
                                 description: reviews.description
                             }
                         });
-                        // console.log(result);
-                        expect(result).to.include({title: 'Honda Civic 2003', description: 'Fast car, very nice!'});
+                        console.log(result);
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.a('object');
                         expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});
-                        expect(result).to.include({title: 'Review title delete-test', description: 'Great motor'});
-                        expect(res.body.reviews.length).to.equal(3);
+                        expect(res.body.reviews.length).to.equal(2);
+                        done();
+                    });
+            });
+            it('should return a single object by its id', function (done) {
+                let singleReview = new Review({title: 'single review title', description: 'single review description'});
+                singleReview.save()
+                chai.request(app)
+                    .get('/reviews/'+ singleReview._id)
+                    .end((err, res) => {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.a('object');
+                        expect(res.body.title).to.equal('single review title');
                         done();
                     });
             });
@@ -90,21 +94,21 @@ describe('Reviews', function () {
         describe('Adding Reviews', function () {
 
             it('should save a review to database', function (done) {
-                let aReview = new Review({title: 'Citroen', description: 'Great motor'});
-                aReview.save()
+                let addReview = new Review({title: 'Citroen', description: 'Great motor'});
+                addReview.save()
                     .then(() => {
-                        assert(!aReview.isNew);
+                        assert(!addReview.isNew);
                         done();
                     })
             });
             it('should add review to database, verify and get correct message from post function', function (done) {
-                let someReview = {
+                let addReview = {
                     title: 'Adding title',
                     description: 'Adding description',
                 };
                 chai.request(app)
                     .post('/reviews')
-                    .send(someReview)
+                    .send(addReview)
                     .end(function (err, res) {
                         expect(res).to.have.status(200);
                         expect(res.body).to.have.property('success').equal(true);
@@ -115,10 +119,10 @@ describe('Reviews', function () {
                 chai.request(app)
                     .get('/reviews')
                     .end(function (err, res) {
-                        let result = _.map(res.body.reviews, (someReview) => {
+                        let result = _.map(res.body.reviews, (reviews) => {
                             return {
-                                title: someReview.title,
-                                description: someReview.description
+                                title: reviews.title,
+                                description: reviews.description
                             };
                         });
                         expect(result).to.include({title: 'Adding title', description: 'Adding description'});
@@ -141,6 +145,7 @@ describe('Reviews', function () {
                 assertReview(Review.update({title: 'Review title 1'},
                     {title: 'Updated review title'}), done);
             });
+
             it('should update a specific record by id and verify its added to the database', (done) => {
                 let updateReview = {
                     title: 'Updated Title',
@@ -150,7 +155,7 @@ describe('Reviews', function () {
                     .get('/reviews')
                     .end(function (err, res) {
                         chai.request(app)
-                            .put('/reviews/' + res.body.reviews[0]._id)
+                            .put('/reviews/' + someReview._id)
                             .send(updateReview)
                             .end(function (error, response) {
                                 expect(res).to.have.status(200);
@@ -162,10 +167,10 @@ describe('Reviews', function () {
                 chai.request(app)
                     .get('/reviews')
                     .end(function (err, res) {
-                        let result = _.map(res.body.reviews, (someReview) => {
+                        let result = _.map(res.body.reviews, (reviews) => {
                             return {
-                                title: someReview.title,
-                                description: someReview.description
+                                title: reviews.title,
+                                description: reviews.description
                             };
                         });
                         expect(result).to.include({title: 'Updated Title', description: 'Updated Description'});
@@ -178,12 +183,12 @@ describe('Reviews', function () {
 
     describe('DELETE /reviews/:id', () => {
 
-        let aReview = new Review({title: 'Review title delete-test', description: 'Great motor'});
-        aReview.save()
+        let deleteReview = new Review({title: 'Review title delete-test', description: 'Great motor'});
+        deleteReview.save()
         describe('Deleting Reviews', function () {
 
             it('should remove instance of the model review', function (done) {
-                aReview.remove()
+                deleteReview.remove()
                     .then(() => Review.findOne({title: 'Review title delete-test'}))
                     .then((review) => {
                         assert(review === null);
@@ -203,12 +208,11 @@ describe('Reviews', function () {
                     .get('/reviews')
                     .end(function (err, res) {
                         chai.request(app)
-                            .delete('/reviews/' + res.body.reviews[0]._id)
+                            .delete('/reviews/' + someReview._id)
                             .end(function (error, response) {
                                 response.should.have.status(200);
                                 response.should.be.json;
                                 response.body.should.be.a('object');
-                                expect(res.body.reviews.length).to.equal(12);
                                 done();
                             });
                     });
@@ -218,7 +222,7 @@ describe('Reviews', function () {
                     .get('/reviews')
                     .end(function (err, res) {
                         chai.request(app)
-                            .delete('/reviews/' + res.body.reviews[10]._id)
+                            .delete('/reviews/' + deleteReview._id)
                             .end(function (err, res) {
                                 expect(res).to.have.status(200);
                                 expect(res.body).to.have.property('success').equal(true);
@@ -229,8 +233,8 @@ describe('Reviews', function () {
                                     };
                                 });
                                 expect(result).to.not.include({
-                                    title: 'Honda Civic 2003',
-                                    description: 'Fast car, very nice!'
+                                    title: 'Review title delete-test',
+                                    description: 'Great motor'
                                 });
                                 done();
                             });
