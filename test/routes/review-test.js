@@ -59,7 +59,6 @@ describe('Reviews', function () {
                                 description: reviews.description
                             }
                         });
-                        console.log(result);
                         expect(res).to.have.status(200);
                         expect(res.body).to.be.a('object');
                         expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});

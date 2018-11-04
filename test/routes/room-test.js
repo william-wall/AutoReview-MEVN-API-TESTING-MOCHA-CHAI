@@ -71,6 +71,18 @@ describe('Reviews', function () {
                         done();
                     });
             });
+            it('should return a single object by its id', function (done) {
+                let singleRoom = new Room({ room_name: 'Single Room'});
+                singleRoom.save()
+                chai.request(app)
+                    .get('/api/rooms/' + singleRoom._id)
+                    .end((err, res) => {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.a('object');
+                        expect(res.body.room_name).to.equal('Single Room');
+                        done();
+                    });
+            });
         });
     });
     describe('POST /rooms', () => {

@@ -62,6 +62,19 @@ describe('mLab Cloud Database Tests', function () {
                         done();
                     });
             });
+            // it('should return a single object by its id', function (done) {
+            //     let singleChat = new Chat({room : '5bd04dc76067682a204fc3ed', nickname: 'Joan', message: 'Im new here'});
+            //     singleChat.save()
+            //     chai.request(app)
+            //         .get('/api/chats/' + singleChat.room)
+            //         .end((err, res) => {
+            //             console.log(res);
+            //             expect(res).to.have.status(200);
+            //             expect(res).to.be.a('object');
+            //             expect(res.nickname).to.equal('Joan');
+            //             done();
+            //         });
+            // });
             it('should throw a 500 error for incorrect id', function (done) {
                 chai.request(app)
                     .get('/api/chats/12')

@@ -34,10 +34,10 @@ describe("SuperTest Reviews", function () {
                             description: reviews.description
                         }
                     });
-                    // console.log(result);
                     done();
                 });
         });
+
     });
 
 
