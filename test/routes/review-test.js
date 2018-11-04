@@ -137,7 +137,7 @@ describe('Reviews', function () {
 
         describe('Updating Reviews', function () {
 
-            it('should get status 500 for incorrect id', function (done) {
+            it('should not update anything and get status 500 for incorrect id', function (done) {
                 let updateReview = {
                     title: 'Updated Title',
                     description: 'Updated Description'
@@ -253,6 +253,18 @@ describe('Reviews', function () {
                                     title: 'Review title delete-test',
                                     description: 'Great motor'
                                 });
+                                done();
+                            });
+                    });
+            });
+            it('should not delete anything and get status 500 for incorrect id', function (done) {
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .delete('/reviews/12')
+                            .end(function (err, res) {
+                                expect(res).to.have.status(500);
                                 done();
                             });
                     });

@@ -93,13 +93,13 @@ app.put('/reviews/:id', (req, res) => {
 })
 
 /* DELETE REVIEW */
-app.delete('/reviews/:id', (req, res) => {
+app.delete('/reviews/:id', (req, res, error) => {
     var db = req.db;
     Review.remove({
         _id: req.params.id
     }, function (err, review) {
         if (err)
-            res.send(err)
+            return res.sendStatus(500);
         res.send({
             success: true
         })
