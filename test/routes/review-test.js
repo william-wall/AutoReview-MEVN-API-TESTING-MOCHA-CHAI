@@ -137,23 +137,23 @@ describe('Reviews', function () {
 
         describe('Updating Reviews', function () {
 
-            // it('should throw exception for incorrect id', function (done) {
-            //     let updateReview = {
-            //         title: 'Updated Title',
-            //         description: 'Updated Description'
-            //     };
-            //     chai.request(app)
-            //         .get('/reviews')
-            //         .end(function (err, res) {
-            //             chai.request(app)
-            //                 .put('/reviews/12')
-            //                 .send(updateReview)
-            //                 .end(function (err, res) {
-            //                     expect(app).to.throw(Error);
-            //                     done();
-            //                 });
-            //         });
-            // });
+            it('should get status 500 for incorrect id', function (done) {
+                let updateReview = {
+                    title: 'Updated Title',
+                    description: 'Updated Description'
+                };
+                chai.request(app)
+                    .get('/reviews')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .put('/reviews/12')
+                            .send(updateReview)
+                            .end(function (err, res) {
+                                expect(res).to.have.status(500);
+                                done();
+                            });
+                    });
+            });
             it('should update an instance of review title', (done) => {
                 someReview.set('title', 'Review title 2');
                 assertReview(someReview.save(), done);
