@@ -193,6 +193,18 @@ describe('Reviews', function () {
                         done();
                     })
             })
+            it('should not delete anything and get status 500 for incorrect id', function (done) {
+                chai.request(app)
+                    .get('/api/rooms/')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .delete('/api/rooms/12')
+                            .end(function (err, res) {
+                                expect(res).to.have.status(500);
+                                done();
+                            });
+                    });
+            });
         });
 
     });
