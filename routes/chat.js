@@ -62,7 +62,7 @@ router.put('/:id', function(req, res, next) {
 /* DELETE CHAT */
 router.delete('/:id', function(req, res, next) {
   Chat.findByIdAndRemove(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
+    if (err) return res.sendStatus(500);
     res.json(post);
   });
 });

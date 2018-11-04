@@ -193,6 +193,18 @@ describe('mLab Cloud Database Tests', function () {
                         done();
                     })
             })
+            it('should not delete anything and get status 500 for incorrect id', function (done) {
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .delete('/api/chats/12')
+                            .end(function (err, res) {
+                                expect(res).to.have.status(500);
+                                done();
+                            });
+                    });
+            });
         });
 
     });
