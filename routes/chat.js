@@ -54,7 +54,7 @@ router.post('/', function(req, res, next) {
 /* UPDATE CHAT */
 router.put('/:id', function(req, res, next) {
   Chat.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
+    if (err) return res.sendStatus(500);
     res.json(post);
   });
 });

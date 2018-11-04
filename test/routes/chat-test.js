@@ -141,7 +141,22 @@ describe('mLab Cloud Database Tests', function () {
                         done();
                     });
             });
-
+            it('should not update anything and get status 500 for incorrect id', function (done) {
+                let updateChat = {
+                    nickname: 'Emma', message: 'Updating chat message'
+                };
+                chai.request(app)
+                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .put('/api/chats/12')
+                            .send(updateChat)
+                            .end(function (err, res) {
+                                expect(res).to.have.status(500);
+                                done();
+                            });
+                    });
+            });
         });
 
     });
