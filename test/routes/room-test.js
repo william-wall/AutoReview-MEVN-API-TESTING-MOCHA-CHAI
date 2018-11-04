@@ -133,6 +133,15 @@ describe('Reviews', function () {
                     });
             });
 
+            it('should not throw a 500 error for incorrect id update', function (done) {
+                chai.request(app)
+                    .get('/api/rooms/12')
+                    .end(function (err, res) {
+                        expect(res).to.have.status(500);
+                        done();
+                    });
+            });
+
         });
 
     });
