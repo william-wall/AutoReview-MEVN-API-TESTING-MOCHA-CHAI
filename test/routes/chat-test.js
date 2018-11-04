@@ -62,6 +62,14 @@ describe('mLab Cloud Database Tests', function () {
                         done();
                     });
             });
+            it('should throw a 500 error for incorrect id', function (done) {
+                chai.request(app)
+                    .get('/api/chats/12')
+                    .end(function (err, res) {
+                        expect(res).to.have.status(500);
+                        done();
+                    });
+            });
         });
     });
 

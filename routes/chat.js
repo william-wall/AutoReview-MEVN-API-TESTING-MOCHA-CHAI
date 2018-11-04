@@ -38,7 +38,7 @@ router.get('/:roomid', function(req, res, next) {
 /* GET SINGLE CHAT BY ID */
 router.get('/:id', function(req, res, next) {
   Chat.findById(req.params.id, function (err, post) {
-    if (err) return next(err);
+    if (err) return res.sendStatus(500);
     res.json(post);
   });
 });
