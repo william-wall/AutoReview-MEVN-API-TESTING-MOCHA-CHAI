@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 /* GET SINGLE ROOM BY ID */
 router.get('/:id', function (req, res, next) {
     Room.findById(req.params.id, function (err, post) {
-        if (err) return next(err);
+        if (err) return res.sendStatus(500);
         res.json(post);
     });
 });

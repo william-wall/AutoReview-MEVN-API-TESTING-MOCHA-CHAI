@@ -63,6 +63,14 @@ describe('Reviews', function () {
                         done();
                     });
             });
+            it('should throw a 500 error for incorrect id', function (done) {
+                chai.request(app)
+                    .get('/api/rooms/12')
+                    .end(function (err, res) {
+                        expect(res).to.have.status(500);
+                        done();
+                    });
+            });
         });
     });
     describe('POST /rooms', () => {
@@ -133,12 +141,20 @@ describe('Reviews', function () {
                     });
             });
 
-            it('should not throw a 500 error for incorrect id update', function (done) {
+            it('should not update anything and get status 500 for incorrect id', function (done) {
+                let updateRoom = {
+                    room_name: 'Updated Room'
+                };
                 chai.request(app)
-                    .get('/api/rooms/12')
+                    .get('/api/rooms/')
                     .end(function (err, res) {
-                        expect(res).to.have.status(500);
-                        done();
+                        chai.request(app)
+                            .put('/api/rooms/12')
+                            .send(updateRoom)
+                            .end(function (err, res) {
+                                expect(res).to.have.status(500);
+                                done();
+                            });
                     });
             });
 

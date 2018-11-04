@@ -79,7 +79,7 @@ describe('Reviews', function () {
                         done();
                     });
             });
-            it('should not throw a 500 error for incorrect id', function (done) {
+            it('should throw a 500 error for incorrect id', function (done) {
                 chai.request(app)
                     .get('/reviews/12')
                     .end(function (err, res) {
