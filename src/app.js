@@ -17,9 +17,11 @@ var chat = require('../routes/chat')
 
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app', { useNewUrlParser: true, promiseLibrary: require('bluebird') })
-// mongodb://localhost:27017/MEVN-boilerplate
-    .then(() =>  console.log('connection succesful'))
+mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app', {
+    useNewUrlParser: true,
+    promiseLibrary: require('bluebird')
+})
+    .then(() => console.log('connection succesful'))
     .catch((err) => console.error(err));
 
 const mongodb_conn_module = require('./mongodbConnModule');
@@ -32,7 +34,7 @@ var Review = require("../models/Review");
 // }
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({'extended':'false'}));
+app.use(bodyParser.urlencoded({'extended': 'false'}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/rooms', express.static(path.join(__dirname, 'dist')));
 app.use('/api/rooms', room);
@@ -41,11 +43,13 @@ app.use('/api/chats', chat);
 /* GET ALL REVIEWS */
 app.get('/reviews', (req, res) => {
     Review.find({}, 'title description', function (error, reviews) {
-        if (error) { console.error(error); }
+        if (error) {
+            console.error(error);
+        }
         res.send({
             reviews: reviews
         })
-    }).sort({_id:-1})
+    }).sort({_id: -1})
 })
 
 /* ADD ROOM */
@@ -63,7 +67,7 @@ app.post('/reviews', (req, res) => {
             console.log(error)
         }
         res.send({
-        success: true
+            success: true
         })
     })
 })
@@ -72,11 +76,12 @@ app.post('/reviews', (req, res) => {
 app.put('/reviews/:id', (req, res) => {
     var db = req.db;
     Review.findById(req.params.id, 'title description', function (error, review) {
-        if (error) { console.error(error); }
-
-
-        review.title = req.body.title
-        review.description = req.body.description
+        if (error) {
+            console.error(error);
+            // throw new Error('some error');
+        }
+        review.title = req.body.title;
+        review.description = req.body.description;
         review.save(function (error) {
             if (error) {
                 console.log(error)
@@ -93,7 +98,7 @@ app.delete('/reviews/:id', (req, res) => {
     var db = req.db;
     Review.remove({
         _id: req.params.id
-    }, function(err, review){
+    }, function (err, review) {
         if (err)
             res.send(err)
         res.send({
@@ -106,18 +111,20 @@ app.delete('/reviews/:id', (req, res) => {
 app.get('/reviews/:id', (req, res) => {
     var db = req.db;
     Review.findById(req.params.id, 'title description', function (error, review) {
-        if (error) { console.error(error); }
+        if (error) {
+            console.error(error);
+        }
         res.send(review)
     })
 })
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
