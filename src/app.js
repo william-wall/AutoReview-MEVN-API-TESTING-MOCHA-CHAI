@@ -111,7 +111,7 @@ app.get('/reviews/:id', (req, res) => {
     var db = req.db;
     Review.findById(req.params.id, 'title description', function (error, review) {
         if (error) {
-            console.error(error);
+            return res.sendStatus(500);
         }
         res.send(review)
     })

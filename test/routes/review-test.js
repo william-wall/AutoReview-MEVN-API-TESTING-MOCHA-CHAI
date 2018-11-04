@@ -79,6 +79,14 @@ describe('Reviews', function () {
                         done();
                     });
             });
+            it('should not throw a 500 error for incorrect id', function (done) {
+                chai.request(app)
+                    .get('/reviews/12')
+                    .end(function (err, res) {
+                        expect(res).to.have.status(500);
+                        done();
+                    });
+            });
             it('should find a user with a particular id', (done) => {
                 Review.findOne({_id: someReview._id})
                     .then((review) => {
