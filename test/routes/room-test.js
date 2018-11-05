@@ -21,15 +21,6 @@ const Room = mongoose.model("Room", RoomSchema);
 
 describe('Reviews', function () {
 
-    before(function () {
-        mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
-        const db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error'));
-        db.once('open', function () {
-            console.log('We are connected to test database!');
-        });
-    });
-
     let someRoom;
     beforeEach((done) => {
         someRoom = new Room(

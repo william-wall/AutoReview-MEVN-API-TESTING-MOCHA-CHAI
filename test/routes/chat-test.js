@@ -23,12 +23,7 @@ const Chat = mongoose.model("Chat", ChatSchema);
 
 describe('mLab Cloud Database Tests', function () {
     before(function (done) {
-        mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
-        const db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error'));
-        db.once('open', function () {
-            console.log('We are connected to test database!');
-        });
+
         var testChat = new Chat({
             room : '5bd04dc76067682a204fc3ed',
             nickname: 'Will',

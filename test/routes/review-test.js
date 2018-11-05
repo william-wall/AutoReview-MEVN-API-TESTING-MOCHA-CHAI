@@ -21,15 +21,6 @@ const Review = mongoose.model("Review", ReviewSchema);
 
 describe('Reviews', function () {
 
-    before(function () {
-        mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
-        const db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error'));
-        db.once('open', function () {
-            console.log('We are connected to test database!');
-        });
-    });
-
     let someReview;
     beforeEach((done) => {
         someReview = new Review({title: 'Review title 1', description: "Review description 1"});

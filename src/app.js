@@ -21,7 +21,7 @@ mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app', {
     useNewUrlParser: true,
     promiseLibrary: require('bluebird')
 })
-    .then(() => console.log('connection successful'))
+    .then(() => console.log('mLab Connection Successful'))
     .catch((err) => console.error(err));
 
 const mongodb_conn_module = require('./mongodbConnModule');
