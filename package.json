@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "mocha test/routes/review-test.js"
+    "test": "set NODE_ENV=test && mocha test/routes/review-test.js"
   },
   "keywords": [],
   "author": "",

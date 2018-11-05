@@ -29,10 +29,10 @@ var db = mongodb_conn_module.connect();
 
 var Review = require("../models/Review");
 
-// if (process.env.NODE_ENV !== 'test') {
-//     app.use(logger('dev'));
-// }
-app.use(logger('dev'));
+if (process.env.NODE_ENV !== 'test') {
+    app.use(logger('dev'));
+}
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': 'false'}));
 app.use(express.static(path.join(__dirname, 'dist')));
