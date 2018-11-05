@@ -25,7 +25,7 @@ describe('mLab Cloud Database Tests', function () {
     before(function (done) {
 
         var testChat = new Chat({
-            room : '5bd04dc76067682a204fc3ed',
+            room: '5bd04dc76067682a204fc3ed',
             nickname: 'Will',
             message: 'Hello'
         });
@@ -38,10 +38,14 @@ describe('mLab Cloud Database Tests', function () {
         describe('Getting Rooms', () => {
 
             it('should return all of the rooms objects', function (done) {
-                let aChat = new Chat({room : '5bd04dc76067682a204fc3ed', nickname: 'Ger', message: 'Hello, will im new here!'});
+                let aChat = new Chat({
+                    room: '5bd04dc76067682a204fc3ed',
+                    nickname: 'Ger',
+                    message: 'Hello, will im new here!'
+                });
                 aChat.save()
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end((err, res) => {
                         expect(res).to.have.status(200);
                         expect(res.body).to.be.a('array');
@@ -57,19 +61,24 @@ describe('mLab Cloud Database Tests', function () {
                         done();
                     });
             });
-            // it('should return a single object by its id', function (done) {
-            //     let singleChat = new Chat({room : '5bd04dc76067682a204fc3ed', nickname: 'Joan', message: 'Im new here'});
-            //     singleChat.save()
-            //     chai.request(app)
-            //         .get('/api/chats/' + singleChat.room)
-            //         .end((err, res) => {
-            //             console.log(res);
-            //             expect(res).to.have.status(200);
-            //             expect(res).to.be.a('object');
-            //             expect(res.nickname).to.equal('Joan');
-            //             done();
-            //         });
-            // });
+            it('should return a single object by its id', function (done) {
+                let singleChat = new Chat({room: '5bd04dc76067682a204fc3ed', nickname: 'Joan', message: 'Im new here'});
+                singleChat.save()
+                chai.request(app)
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
+                    .end(function (err, res) {
+                        chai.request(app)
+                            .get('/api/chats/' + singleChat._id)
+                            .end((err, res) => {
+                                expect(res).to.have.status(200);
+                                expect(res).to.be.a('object');
+                                expect(singleChat.nickname).to.equal('Joan');
+                                done();
+                            });
+                    });
+            });
+
+
             it('should throw a 500 error for incorrect id', function (done) {
                 chai.request(app)
                     .get('/api/chats/12')
@@ -87,7 +96,7 @@ describe('mLab Cloud Database Tests', function () {
 
             it('should add chat to database directly to a specific room, verify and get correct message from post function', function (done) {
                 let someChat = {
-                    room : '5bd04dc76067682a204fc3ed', nickname: 'Joan', message: 'Im new here'
+                    room: '5bd04dc76067682a204fc3ed', nickname: 'Joan', message: 'Im new here'
                 };
                 chai.request(app)
                     .post('/api/chats/')
@@ -100,7 +109,7 @@ describe('mLab Cloud Database Tests', function () {
             });
             after(function (done) {
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         let result = _.map(res.body, (chats) => {
                             return {
@@ -124,7 +133,7 @@ describe('mLab Cloud Database Tests', function () {
                     nickname: 'Emma', message: 'Updating chat message'
                 };
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         chai.request(app)
                             .put('/api/chats/' + res.body[0]._id)
@@ -137,7 +146,7 @@ describe('mLab Cloud Database Tests', function () {
             });
             after(function (done) {
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         let result = _.map(res.body, (chats) => {
                             return {
@@ -154,7 +163,7 @@ describe('mLab Cloud Database Tests', function () {
                     nickname: 'Emma', message: 'Updating chat message'
                 };
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         chai.request(app)
                             .put('/api/chats/12')
@@ -176,7 +185,7 @@ describe('mLab Cloud Database Tests', function () {
 
             it('should delete chat by id and remove the object instance', function (done) {
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         chai.request(app)
                             .delete('/api/chats/' + res.body[0]._id)
@@ -188,7 +197,7 @@ describe('mLab Cloud Database Tests', function () {
             });
             after(function (done) {
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         expect(res).to.have.status(200);
                         // expect(res.body).be.be.a('array');
@@ -203,7 +212,7 @@ describe('mLab Cloud Database Tests', function () {
             })
             it('should not delete anything and get status 500 for incorrect id', function (done) {
                 chai.request(app)
-                    .get('/api/chats/'+'5bd04dc76067682a204fc3ed')
+                    .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         chai.request(app)
                             .delete('/api/chats/12')
