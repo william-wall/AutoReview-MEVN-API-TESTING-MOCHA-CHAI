@@ -40,14 +40,13 @@ describe('Reviews', function () {
                 chai.request(app)
                     .get('/api/rooms/')
                     .end((err, res) => {
-                        expect(res).to.have.status(200);
-                        expect(res.body).to.be.a('array');
                         let result = _.map(res.body, (rooms) => {
                             return {
                                 room_name: rooms.room_name,
-                                // created_date: rooms.created_date
                             }
                         });
+                        expect(res).to.have.status(200);
+                        expect(result).to.be.a('array');
                         expect(result).to.include({room_name: 'Room 1'});
                         expect(result).to.include({room_name: 'Room 2'});
                         expect(res.body.length).to.equal(3);
@@ -69,8 +68,8 @@ describe('Reviews', function () {
                     .get('/api/rooms/' + singleRoom._id)
                     .end((err, res) => {
                         expect(res).to.have.status(200);
-                        expect(res.body).to.be.a('object');
-                        expect(res.body.room_name).to.equal('Single Room');
+                        expect(singleRoom).to.be.a('object');
+                        expect(singleRoom.room_name).to.equal('Single Room');
                         done();
                     });
             });
@@ -101,6 +100,8 @@ describe('Reviews', function () {
                                 room_name: newRoom.room_name
                             };
                         });
+                        expect(res).to.have.status(200);
+                        expect(result).to.be.a('array');
                         expect(result).to.include({room_name: 'New Room'});
                         done();
                     });
@@ -121,6 +122,7 @@ describe('Reviews', function () {
                 chai.request(app)
                     .get('/api/rooms/')
                     .end(function (err, res) {
+                        expect(res).to.have.status(200);
                         chai.request(app)
                             .put('/api/rooms/' + res.body[0]._id)
                             .send(updateRoom)
@@ -139,6 +141,8 @@ describe('Reviews', function () {
                                 room_name: rooms.room_name,
                             };
                         });
+                        expect(res).to.have.status(200);
+                        expect(result).to.be.a('array');
                         expect(result).to.include({room_name: 'Updated Room'});
                         done();
                     });
@@ -174,7 +178,7 @@ describe('Reviews', function () {
                     .get('/api/rooms/')
                     .end(function (err, res) {
                         chai.request(app)
-                            .delete('/api/rooms/' + res.body[0]._id)
+                            .delete('/api/rooms/' + aRoom._id)
                             .end(function (err, res) {
                                 expect(res).to.have.status(200);
                                 done();
@@ -186,7 +190,7 @@ describe('Reviews', function () {
                     .get('/api/rooms/')
                     .end(function (err, res) {
                         expect(res).to.have.status(200);
-                        // expect(res.body).be.be.a('array');
+                        expect(res.body).be.be.a('array');
                         let result = _.map(res.body, (rooms) => {
                             return {
                                 room_name: rooms.room_name

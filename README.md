@@ -95,4 +95,5 @@ meaning that a direct mLab connection is not made rather it is automatically ren
 [ Markdown Tip: By indenting the above listing, GitHub will display it in a 'box' and preserve any formatting.]
 
 ## Extra features.
-. . . . Briefly state any extra features of your testing that you feel should be high-lighted . . . . .
+
+Please note: The chats route requires socket.io which enables real-time chat, but this can only be seen functioning on a client side display.
