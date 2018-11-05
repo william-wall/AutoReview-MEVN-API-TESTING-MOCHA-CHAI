@@ -33,9 +33,9 @@ describe('mLab Cloud Database Tests', function () {
     });
 
 
-    describe('GET /rooms', () => {
+    describe('GET /chats', () => {
 
-        describe('Getting Rooms', () => {
+        describe('Getting Chats', () => {
 
             it('should return all of the rooms objects', function (done) {
                 let aChat = new Chat({
@@ -47,14 +47,14 @@ describe('mLab Cloud Database Tests', function () {
                 chai.request(app)
                     .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end((err, res) => {
-                        expect(res).to.have.status(200);
-                        expect(res.body).to.be.a('array');
                         let result = _.map(res.body, (chats) => {
                             return {
                                 nickname: chats.nickname,
                                 message: chats.message
                             }
                         });
+                        expect(res).to.have.status(200);
+                        expect(res).to.be.a('object');
                         expect(result).to.include({nickname: 'Will', message: 'Hello'});
                         expect(result).to.include({nickname: 'Ger', message: 'Hello, will im new here!'});
                         expect(res.body.length).to.equal(2);
@@ -103,7 +103,6 @@ describe('mLab Cloud Database Tests', function () {
                     .send(someChat)
                     .end(function (err, res) {
                         expect(res).to.have.status(200);
-                        // expect(res.body).to.have.property('success').equal(true);
                         done();
                     });
             });
@@ -117,6 +116,8 @@ describe('mLab Cloud Database Tests', function () {
                                 message: chats.message
                             }
                         });
+                        expect(res).to.be.a('object');
+                        expect(res).to.have.status(200);
                         expect(result).to.include({nickname: 'Joan', message: 'Im new here'});
                         done();
                     });
@@ -138,7 +139,7 @@ describe('mLab Cloud Database Tests', function () {
                         chai.request(app)
                             .put('/api/chats/' + res.body[0]._id)
                             .send(updateChat)
-                            .end(function (error, response) {
+                            .end(function (err, res) {
                                 expect(res).to.have.status(200);
                                 done();
                             });
@@ -154,7 +155,9 @@ describe('mLab Cloud Database Tests', function () {
                                 message: chats.message
                             }
                         });
+                        expect(res).to.be.a('object');
                         expect(result).to.include({nickname: 'Emma', message: 'Updating chat message'});
+                        expect(res).to.have.status(200);
                         done();
                     });
             });
@@ -188,7 +191,7 @@ describe('mLab Cloud Database Tests', function () {
                     .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
                         chai.request(app)
-                            .delete('/api/chats/' + res.body[0]._id)
+                            .delete('/api/chats/' + deleteChat._id)
                             .end(function (err, res) {
                                 expect(res).to.have.status(200);
                                 done();
@@ -199,13 +202,13 @@ describe('mLab Cloud Database Tests', function () {
                 chai.request(app)
                     .get('/api/chats/' + '5bd04dc76067682a204fc3ed')
                     .end(function (err, res) {
-                        expect(res).to.have.status(200);
-                        // expect(res.body).be.be.a('array');
                         let result = _.map(res.body, (rooms) => {
                             return {
                                 room_name: rooms.room_name
                             };
                         });
+                        expect(res).to.have.status(200);
+                        expect(res.body).be.be.a('array');
                         expect(result).to.not.include({room_name: 'Room delete-test'});
                         done();
                     })
