@@ -22,9 +22,11 @@ describe("SuperTest Reviews", function () {
             server
                 .post('/reviews')
                 .send(review)
+                .expect(200)
                 .end(function (err, res) {
                     server
                         .get('/reviews')
+                        .expect(200)
                         .end(function (err, res) {
                             expect(res.statusCode).to.equal(200);
                             review = res.body;
