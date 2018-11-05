@@ -50,7 +50,8 @@ app.get('/reviews', (req, res) => {
             console.error(error);
         }
         res.send({
-            reviews: reviews
+            reviews: reviews,
+            success: true
         })
     }).sort({_id: -1})
 })

@@ -54,6 +54,7 @@ describe('Reviews', function () {
                         expect(res.body).to.be.a('object');
                         expect(result).to.include({title: 'Review title 1', description: 'Review description 1'});
                         expect(res.body.reviews.length).to.equal(2);
+                        expect(res.body).to.have.property('success').equal(true);
                         done();
                     });
             });
@@ -64,12 +65,13 @@ describe('Reviews', function () {
                     .get('/reviews/' + singleReview._id)
                     .end((err, res) => {
                         expect(res).to.have.status(200);
-                        expect(res.body).to.be.a('object');
+                        expect(singleReview).to.be.a('object');
                         expect(res.body.title).to.equal('single review title');
+                        expect(singleReview).to.include({title: 'single review title', description: 'single review description'});
                         done();
                     });
             });
-            it('should throw a 500 error for incorrect id', function (done) {
+            it('should return a 500 status for incorrect id entered', function (done) {
                 chai.request(app)
                     .get('/reviews/12')
                     .end(function (err, res) {
@@ -99,7 +101,7 @@ describe('Reviews', function () {
                         done();
                     })
             });
-            it('should add review to database, verify and get correct message from post function', function (done) {
+            it('should add review to database, verify and get correct message from post request', function (done) {
                 let addReview = {
                     title: 'Adding title',
                     description: 'Adding description',
@@ -109,6 +111,7 @@ describe('Reviews', function () {
                     .send(addReview)
                     .end(function (err, res) {
                         expect(res).to.have.status(200);
+                        expect(addReview).to.be.a('object');
                         expect(res.body).to.have.property('success').equal(true);
                         done();
                     });
@@ -173,6 +176,8 @@ describe('Reviews', function () {
                             .put('/reviews/' + someReview._id)
                             .send(updateReview)
                             .end(function (error, response) {
+                                expect(updateReview).to.be.a('object');
+                                expect(res.body).to.have.property('success').equal(true);
                                 expect(res).to.have.status(200);
                                 done();
                             });
