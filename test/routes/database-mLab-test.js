@@ -16,7 +16,7 @@ const Review = mongoose.model("Review", ReviewSchema);
 
 describe('mLab Cloud Database Tests', function () {
     before(function (done) {
-        mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app');
+        mongoose.connect('mongodb://will:william1@ds125341.mlab.com:25341/post-app', {useNewUrlParser: true});
         const db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error'));
         db.once('open', function () {

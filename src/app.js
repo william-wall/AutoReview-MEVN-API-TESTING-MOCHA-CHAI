@@ -2,13 +2,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-// const morgan = require('morgan')
 const app = express()
 var createError = require('http-errors')
 var path = require('path')
 var favicon = require('serve-favicon')
 var logger = require('morgan')
-// app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
@@ -29,13 +27,12 @@ var db = mongodb_conn_module.connect();
 
 var Review = require("../models/Review");
 
-// if (process.env.NODE_ENV !== 'test') {
-//     app.use(logger('dev'));
-// }
+if (process.env.NODE_ENV === 'test') {
+    app.use(logger('dev'));
+}
 // if (app.get('env') !== 'test') {
 //     app.use(logger('dev'));
 // }
-// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended': 'false'}));
 app.use(express.static(path.join(__dirname, 'dist')));
