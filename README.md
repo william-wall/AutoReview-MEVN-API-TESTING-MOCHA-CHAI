@@ -3,7 +3,7 @@
 Name: William Wall
 Student Number: 20070255
 
-NOTE: Network connection is essential for successful running of tests.
+NOTE: Network connection is essential for successful running of tests. i.e. for mongo mLab and Heroku hosted server !
 
 ## Overview.
 
@@ -46,7 +46,7 @@ The AutoReview API has three main functional areas.
 
 - Mongodb
 
-Note: For each test suite reviews, chats and rooms a database connection is made to mLab cloud stored database.
+Note: For each test suite reviews, chats and rooms a database connection is made to an mLab cloud database.
 The tests are then completed and finally the database is dropped at the end ensuring the mLab database is NOT populated with large amounts of unwanted data.
 
 - Schemas
