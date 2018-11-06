@@ -46,7 +46,7 @@ The AutoReview API has three main functional areas.
 
 - Mongodb
 
-Note: For each test suite reviews, chats and rooms a database connection is made to an mLab cloud database.
+NOTE: For each test suite reviews, chats and rooms a database connection is made to an mLab cloud database.
 The tests are then completed and finally the database is dropped at the end ensuring the mLab database is NOT populated with large amounts of unwanted data.
 
 - Schemas
@@ -69,6 +69,8 @@ The tests are then completed and finally the database is dropped at the end ensu
 
 The test suite using supertest points to the hosted Heroku application which has mLab embedded into its code,
 meaning that a direct mLab connection is not made rather it is automatically rendered by the hosted server.
+
+NOTE: Heroku is naturally slow for the FIRST http response, run npm start a second time for guaranteed success if supertest shows failure the first time.
 
 URL: http://autoreview-testing.herokuapp.com/
 
