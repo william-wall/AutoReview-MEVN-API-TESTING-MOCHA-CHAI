@@ -74,6 +74,14 @@ NOTE: Heroku is naturally slow for the FIRST http response, run npm start a seco
 
 URL: http://autoreview-testing.herokuapp.com/
 
+## Run server.
+
+npm start
+
+## Run test script's.
+
+npm test
+
 ## Sample Test execution.
 
 Note: npm test - will run all test scripts
