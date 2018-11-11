@@ -5,6 +5,14 @@ Student Number: 20070255
 
 NOTE: Network connection is essential for successful running of tests. i.e. for mongo mLab and Heroku hosted server!
 
+## Run server.
+
+npm start
+
+## Run test script's.
+
+npm test
+
 ## Overview.
 
 AutoReview is a web app by where users write reviews about motor vehicles and topics.
@@ -73,14 +81,6 @@ meaning that a direct mLab connection is not made rather it is automatically ren
 NOTE: Heroku is naturally slow for the FIRST http response, run npm start a second time for guaranteed success if supertest shows failure the first time.
 
 URL: http://autoreview-testing.herokuapp.com/
-
-## Run server.
-
-npm start
-
-## Run test script's.
-
-npm test
 
 ## Sample Test execution.
 
